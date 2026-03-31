@@ -206,6 +206,17 @@ td:nth-child(2) {
     table {
         page-break-inside: avoid;
     }
+
+    /* corriger colonnes de gauche */
+    #grid td:first-child,
+    #grid th:first-child {
+        width: 60px !important;
+    }
+    
+    #grid td:nth-child(2),
+    #grid th:nth-child(2) {
+       width: 30px !important;
+    }
 }
 
 </style>
