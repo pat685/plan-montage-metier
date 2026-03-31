@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+/* ===== BODY ===== */
+body { 
+    font-family: Arial; 
+    margin: 0;
+    zoom: 1.2;
+}
+
+/* ===== TABLE ===== */
+table { 
+    border-collapse: collapse; 
+    margin: 20px auto;
+}
+
+/* ===== CELLULES ===== */
+td, th {
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    font-size: 11px;
+    padding: 0;
+}
+
+/* ===== INPUTS ===== */
+input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #777;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* ===== LIGNES ÉPAISSES ===== */
+tr:nth-child(5n+3) input {
+    border-bottom: 2px solid #555;
+}
+
+/* ===== COLONNES ÉPAISSES ===== */
+td:nth-child(5n+4) input {
+    border-right: 2px solid #555;
+}
+
+/* ===== ENTÊTES ===== */
+th {
+    border: 1px solid #777;
+    background: #f0f0f0;
+}
+
+/* ===== RECOPIE ===== */
+.copy {
+    width: 70px;
+    border-top: 1px solid #777;
+    border-bottom: 1px solid #777;
+}
+
+/* ===== CRAMPES NO ===== */
+.vertical {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    border: 1px solid #777;
+}
+
+/* ===== BOUTON ===== */
+.calc-btn {
+    display: block;
+    margin: 10px 0; /* plus de margin-left */
+    padding: 8px 20px;
+    font-size: 15px;
+    background: linear-gradient(#5da9ff, #2a6fd6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 3px #1a4fa0;
+}
+
+.calc-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px #1a4fa0;
+}
+
+.invalid {
+    background-color: red !important;
+}
+
+/* quadrillage pour colonnes Recopie + numéros */
+.copy, td:nth-child(2) {
+    border: 1px solid #777;
+}
+
+/* lignes épaisses (mêmes que grille) */
+tr:nth-child(5n+3) td:nth-child(2),
+tr:nth-child(5n+3) .copy {
+    border-bottom: 2px solid #555;
+}
+
+/* séparation verticale plus visible */
+td:nth-child(2) {
+    border-right: 2px solid #555;
+}
+
+#result {
+    margin-top: 10px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+/* ENTÊTE */
+#result th {
+    background: #ffe600;
+    border: 1px solid black;
+    padding: 8px 6px;
+}
+
+/* CELLULES */
+#result td {
+    border: 1px solid black;
+    padding: 2px 6px;
+    height: 20px
+    text-align: center;
+}
+
+/* COLONNE COULEUR */
+#result td:first-child {
+    width: 140px;
+    white-space: nowrap; /* empêche retour ligne */
+    text-align: left;
+    padding-left: 8px;
+}
+
+/* LIGNE TOTAL */
+#result tr:last-child td {
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    font-weight: bold;
+}
+
+#result tr:last-child td {
+    border: 3px solid black;
+    font-weight: bold;
+}
+
+.container {
+    width: fit-content;
+    margin: 0 auto; /* centre l'ensemble */
+}
+
+.container h3 {
+    text-align: center;
+}
+
+/* ============================= */
+/* IMPRESSION */
+/* ============================= */
+
+@media print {
+
+    @page {
+        size: landscape;
+        margin: 10mm;
+    }
+
+    body {
+        zoom: 1; /* important */
+    }
+
+    /* cacher bouton */
+    .calc-btn {
+        display: none;
+    }
+
+    /* réduire espace */
+    h3 {
+        margin: 5px 0;
+    }
+
+    /* compacter tableau principal */
+    #grid td, #grid th {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+    }
+
+    #grid input {
+        font-size: 9px;
+    }
+
+    /* tableau résultat compact */
+    #result td, #result th {
+        font-size: 10px;
+        padding: 2px 4px;
+    }
+
+    /* éviter coupure */
+    table {
+        page-break-inside: avoid;
+    }
+
+    /* forcer impression couleur */
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+}
+<
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h3>Plan de montage</h3>
+
+    <table id="grid"></table>
+
+    <button class="calc-btn" onclick="calculer()">Calculer</button>
+
+    <table id="result"></table>
+</div>
+
+<script>
+
+const couleurs = {
+B:{nom:"Blanc",bg:"#fff",color:"#000"},
+N:{nom:"Noir",bg:"#000",color:"#fff"},
+GF:{nom:"Gris foncé",bg:"#505050",color:"#fff"},
+GP:{nom:"Gris pâle",bg:"#ccc",color:"#000"},
+BL:{nom:"Bleu",bg:"#0078d7",color:"#fff"},
+V:{nom:"Vert",bg:"#00b050",color:"#fff"},
+O:{nom:"Orange",bg:"#ff8c00",color:"#000"},
+J:{nom:"Jaune",bg:"#ffff00",color:"#000"},
+BR:{nom:"Brun",bg:"#964b00",color:"#fff"}
+};
+
+const lignes = 13;
+const colonnes = 30;
+
+let table = document.getElementById("grid");
+
+/* ===== FILS NO ===== */
+let titre = document.createElement("tr");
+titre.innerHTML = "<th></th><th></th><th></th><th colspan='30'>Fils no.</th>";
+table.appendChild(titre);
+
+/* ===== ENTÊTE ===== */
+let tr = document.createElement("tr");
+tr.innerHTML = "<th></th><th class='vertical' rowspan='14'>Crampes no.</th><th></th>";
+
+for(let c=1;c<=colonnes;c++){
+    tr.innerHTML += "<th>"+c+"</th>";
+}
+table.appendChild(tr);
+
+let cells = [];
+
+/* ===== LIGNES ===== */
+for(let i=0;i<lignes;i++){
+
+    let tr = document.createElement("tr");
+    cells[i]=[];
+
+    /* Recopie */
+    let btn = document.createElement("td");
+    btn.className="copy";
+    btn.innerText="Recopie";
+    btn.onclick = ()=>copier(i);
+    tr.appendChild(btn);
+
+    /* numéro de crampe */
+    let num = document.createElement("td");
+    num.innerText = i+1;
+    tr.appendChild(num);
+
+    for(let j=0;j<colonnes;j++){
+
+        let td = document.createElement("td");
+        let input = document.createElement("input");
+
+        input.oninput = ()=>{
+            let v = input.value.toUpperCase();
+            input.value = v;
+
+            if(couleurs[v]){
+                input.style.background=couleurs[v].bg;
+                input.style.color=couleurs[v].color;
+                input.classList.remove("invalid");
+            } else if(v===""){
+                input.style.background="";
+                input.classList.remove("invalid");
+            } else {
+                input.classList.add("invalid");
+            }
+
+            sauver();
+        };
+
+        td.appendChild(input);
+        tr.appendChild(td);
+        cells[i][j]=input;
+    }
+
+    table.appendChild(tr);
+}
+
+/* ===== COPIE ===== */
+function copier(i){
+    let v = cells[i][0].value;
+    for(let j=0;j<colonnes;j++){
+        cells[i][j].value=v;
+        cells[i][j].dispatchEvent(new Event("input"));
+    }
+}
+
+/* ===== SAUVEGARDE ===== */
+function sauver(){
+    localStorage.setItem("montage", JSON.stringify(cells.map(r=>r.map(c=>c.value))));
+}
+
+/* ===== CHARGEMENT ===== */
+(function(){
+    let data = JSON.parse(localStorage.getItem("montage")||"[]");
+    data.forEach((row,i)=>{
+        row.forEach((val,j)=>{
+            if(cells[i]&&cells[i][j]){
+                cells[i][j].value=val;
+                cells[i][j].dispatchEvent(new Event("input"));
+            }
+        });
+    });
+})();
+
+
+
+/* ===== CALCUL ===== */
+function calculer(){
+
+    let counts = {};
+    let maxLigne = {};
+
+    // ===== COMPTER =====
+    for(let i=0;i<lignes;i++){
+        let temp = {};
+
+        for(let j=0;j<colonnes;j++){
+            let v = cells[i][j].value;
+
+            if(couleurs[v]){
+                counts[v] = (counts[v] || 0) + 1;
+                temp[v] = (temp[v] || 0) + 1;
+            }
+        }
+
+        for(let c in temp){
+            maxLigne[c] = Math.max(maxLigne[c] || 0, temp[c]);
+        }
+    }
+
+    // ===== PARAMÈTRES =====
+    let nb = 90;
+    let long = 40;
+    let perte = 36;
+
+    let longTot = ((nb * long) + perte) * 0.0254;
+
+    // ===== CALCUL =====
+    let data = [];
+
+    for(let c in counts){
+
+        let l = counts[c] * longTot;
+        let p = l / 7.68 * 1.1;
+
+        let bobL = Math.ceil(p / 230);
+        let bobM = Math.ceil(maxLigne[c] / 2);
+        let bobT = Math.max(bobL, bobM);
+
+        data.push({
+            nom: couleurs[c].nom,
+            fils: counts[c],
+            long: bobL,
+            montage: bobM,
+            total: bobT,
+            bg: couleurs[c].bg,
+            color: couleurs[c].color
+        });
+    }
+
+    // ===== TRI =====
+    data.sort((a,b)=>b.total - a.total);
+
+    // ===== TABLEAU =====
+    let html = `
+    <tr>
+        <th>Couleur</th>
+        <th>Nombre Fils</th>
+        <th>Nombre Bobines<br>(longueur)</th>
+        <th>Nombre Bobines<br>(montage)</th>
+        <th>Nombre Bobines<br>(totales)</th>
+    </tr>
+    `;
+
+    let totalGlobal = 0;
+
+    data.forEach(d => {
+
+        totalGlobal += d.total;
+
+        html += `
+        <tr>
+            <td style="background:${d.bg}; color:${d.color}">${d.nom}</td>
+            <td>${d.fils}</td>
+            <td>${d.long}</td>
+            <td>${d.montage}</td>
+            <td><b>${d.total}</b></td>
+        </tr>`;
+    });
+
+    // ===== TOTAL =====
+    html += `
+    <tr>
+        <td colspan="4" style="text-align:right;"><b>Total</b></td>
+        <td><b>${totalGlobal}</b></td>
+    </tr>
+    `;
+
+    document.getElementById("result").innerHTML = html;
+}
+
+
+</script>
+
+</body>
+</html>
