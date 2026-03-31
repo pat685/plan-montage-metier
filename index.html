@@ -163,11 +163,11 @@ td:nth-child(2) {
 
     @page {
         size: landscape;
-        margin: 10mm;
+        margin: 8mm;
     }
 
     body {
-        zoom: 1; /* important */
+        zoom: 0.75; /* 🔥 ajuste pour tout faire rentrer */
     }
 
     /* cacher bouton */
@@ -175,41 +175,39 @@ td:nth-child(2) {
         display: none;
     }
 
-    /* réduire espace */
-    h3 {
-        margin: 5px 0;
+    /* mettre grille + résultat côte à côte */
+    .container {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
     }
 
-    /* compacter tableau principal */
+    /* grille compacte */
     #grid td, #grid th {
-        width: 18px;
-        height: 18px;
-        font-size: 9px;
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
     }
 
     #grid input {
-        font-size: 9px;
+        font-size: 8px;
     }
 
     /* tableau résultat compact */
-    #result td, #result th {
+    #result {
         font-size: 10px;
-        padding: 2px 4px;
+    }
+
+    #result td, #result th {
+        padding: 3px;
     }
 
     /* éviter coupure */
     table {
         page-break-inside: avoid;
     }
-
-    /* forcer impression couleur */
-    * {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-
 }
-<
+
 </style>
 </head>
 
