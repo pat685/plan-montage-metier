@@ -407,6 +407,8 @@ td:nth-child(2) {
 </style>
 </head>
 
+/* ==================================================================================================
+    
 <body>
 
 <div class="container">
@@ -463,7 +465,13 @@ table.appendChild(titre);
 
 /* ===== ENTÊTE ===== */
 let tr = document.createElement("tr");
-tr.innerHTML = "<th></th><th class='crampe-label' rowspan='14'>Crampes no.</th><th></th>";
+tr.innerHTML = "<th></th><th class='crampe-label' rowspan='14'></th><th></th>";
+setTimeout(() => {
+const el = document.querySelector(".crampe-label");
+if(el){
+    el.innerHTML = "C<br>r<br>a<br>m<br>p<br>e<br>s<br>&nbsp;<br>n<br>o";
+    }
+}, 0);
 
 for(let c=1;c<=colonnes;c++){
     tr.innerHTML += "<th>"+c+"</th>";
