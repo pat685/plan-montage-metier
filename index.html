@@ -240,38 +240,22 @@ td:nth-child(2) {
         display: none;
     }
 
-    /* cacher inputs */
+    /* impression : forcer rendu simple */
     #grid input {
-        display: none;
-    }
+        display: block;
+        width: 100%;
+        height: 100%;
 
-    /* IMPORTANT */
-    #grid td {
-        position: relative;
-    }
+        border: none;          /* enlève style iOS */
+        margin: 0;
+        padding: 0;
 
-    /* afficher texte */
-    #grid td::after {
-        content: attr(data-val);
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
+        text-align: center;
         font-size: 9px;
-    }
 
-    /* garder couleurs */
-    #grid td {
-        background: inherit !important;
-        color: inherit !important;
+        background: transparent; /* 🔥 garde couleur cellule */
     }
-
+    
     /* bordures + taille */
     #grid td, #grid th {
         border: 1px solid #777 !important;
@@ -280,6 +264,10 @@ td:nth-child(2) {
         font-size: 9px;
     }
 
+    #grid td {
+        background-clip: padding-box;
+    }
+    
     /* lignes fortes */
     #grid tr:nth-child(5n) td {
         border-bottom: 2px solid #555 !important;
@@ -321,7 +309,7 @@ td:nth-child(2) {
     }
 
     /* couleurs impression */
-    * {
+    #grid td {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
