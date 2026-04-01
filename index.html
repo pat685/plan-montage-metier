@@ -374,30 +374,29 @@ td:nth-child(2) {
         height: 100%;
         font-size: 9px;
     }
+}
 /* ================= PDF ONLY ================= */
-    .pdf-mode .crampe-label {
-        writing-mode: initial !important;
-        transform: rotate(-90deg) !important;
-        transform-origin: center;
-    }
-
-    .pdf-mode #result {
-        margin-top: -80px !important;
-    }
-
-    .pdf-mode #grid td,
-    .pdf-mode #grid th {
-        height: 16px !important;
-        line-height: 16px !important;
-    }
-
-    .pdf-mode #grid input {
-        font-family: monospace !important;
-        letter-spacing: -0.3px;
-    }
-    
+.pdf-mode .crampe-label {
+    writing-mode: initial !important;
+    transform: rotate(-90deg) !important;
+    transform-origin: center;
 }
 
+.pdf-mode #result {
+    margin-top: -80px !important;
+}
+
+.pdf-mode #grid td,
+.pdf-mode #grid th {
+    height: 16px !important;
+    line-height: 16px !important;
+}
+
+.pdf-mode #grid input {
+    font-family: monospace !important;
+    letter-spacing: -0.3px;
+}
+    
 </style>
 </head>
 
@@ -548,6 +547,8 @@ function genererPDF(){
     
     // 🔥 activer mode PDF
     document.body.classList.add("pdf-mode");
+    // 🔥 désactiver styles print
+    document.body.classList.add("no-print");
     
     const opt = {
         margin: 5,
@@ -557,9 +558,12 @@ function genererPDF(){
         jsPDF: { unit: 'mm', format: 'letter', orientation: 'landscape' }
     };
 
+    // 🔥 revenir normal après
     html2pdf().set(opt).from(element).save().then(() => {
-        // 🔥 revenir normal après
         document.body.classList.remove("pdf-mode");
+    });
+    html2pdf().set(opt).from(element).save().then(() => {
+        document.body.classList.remove("no-print");
     });
 }
 
