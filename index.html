@@ -240,6 +240,20 @@ td:nth-child(2) {
         display: none;
     }
 
+    /* cacher les inputs à l'impression */
+    #grid input {
+        display: none;
+    }
+
+    /* afficher la valeur comme texte */
+    #grid td::after {
+        content: attr(data-val);
+        display: block;
+        font-size: 8px;
+        line-height: 14px;
+        text-align: center;
+    }
+    
     /* forcer disposition verticale */
     .container {
         display: block;
@@ -385,7 +399,7 @@ for(let i=0;i<lignes;i++){
         input.oninput = ()=>{
             let v = input.value.toUpperCase();
             input.value = v;
-
+            td.setAttribute("data-val", v); // 🔥 AJOUT
             if(couleurs[v]){
                 input.style.background=couleurs[v].bg;
                 input.style.color=couleurs[v].color;
