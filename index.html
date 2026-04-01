@@ -74,8 +74,9 @@ th {
     box-shadow: 0 3px #1a4fa0;
 }
 
-    .calc-btn.pdf {
+.calc-btn.pdf {
     background: linear-gradient(#28a745, #1e7e34);
+    box-shadow: 0 3px #145c2b;   /* 🔥 vert foncé */
 }
     
 .calc-btn:active {
@@ -104,7 +105,7 @@ td:nth-child(2) {
 }
 
 #result {
-    margin-top: -40px;
+    margin-top: -60px;
     border-collapse: collapse;
     font-size: 13px;
     page-break-inside: avoid;
@@ -165,12 +166,12 @@ td:nth-child(2) {
 }
 
 .crampe-label {
-    transform: rotate(-90deg);
-    transform-origin: center;
-    white-space: nowrap;
+    writing-mode: vertical-rl;
+    transform: none;
     text-align: center;
-    width: 30px;
+    white-space: nowrap;
     vertical-align: middle;
+    width: 30px;
 }
 
 /* container déjà centré */
