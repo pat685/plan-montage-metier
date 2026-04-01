@@ -154,6 +154,52 @@ td:nth-child(2) {
 .container h3 {
     text-align: center;
 }
+.header {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.header h3 {
+    margin: 0;
+    text-align: left;
+}
+
+/* légende */
+.legende {
+    margin-top: 5px;
+}
+
+.legende-titre {
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.legende-ligne {
+    display: flex;
+    gap: 2px;
+}
+
+/* cases */
+.case {
+    display: inline-block;
+    width: 28px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    border: 1px solid black;
+    font-size: 12px;
+}
+
+/* couleurs */
+.B { background:#fff; color:#000; }
+.N { background:#000; color:#fff; }
+.GF { background:#505050; color:#fff; }
+.GP { background:#ccc; color:#000; }
+.BL { background:#0078d7; color:#fff; }
+.V { background:#00b050; color:#fff; }
+.O { background:#ff8c00; color:#000; }
+.J { background:#ffff00; color:#000; }
+.BR { background:#964b00; color:#fff; }
 
 /* ============================= */
 /* IMPRESSION */
@@ -163,11 +209,11 @@ td:nth-child(2) {
 
     @page {
         size: landscape;
-        margin: 8mm;
+        margin: 10mm;
     }
 
     body {
-        zoom: 0.75; /* 🔥 ajuste pour tout faire rentrer */
+        zoom: 0.85;
     }
 
     /* cacher bouton */
@@ -175,47 +221,46 @@ td:nth-child(2) {
         display: none;
     }
 
-    /* mettre grille + résultat côte à côte */
+    /* forcer disposition verticale */
     .container {
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
+        display: block;
     }
 
-    /* grille compacte */
-    #grid td, #grid th {
-        width: 14px;
-        height: 14px;
-        font-size: 8px;
+    /* grille en haut */
+    #grid {
+        margin-bottom: 20px;
     }
 
-    #grid input {
-        font-size: 8px;
-    }
-
-    /* tableau résultat compact */
+    /* tableau résultat en dessous */
     #result {
-        font-size: 10px;
+        margin-top: 10px;
     }
 
-    #result td, #result th {
-        padding: 3px;
-    }
-
-    /* éviter coupure */
+    /* éviter coupure dans un tableau */
     table {
         page-break-inside: avoid;
     }
 
-    /* corriger colonnes de gauche */
-    #grid td:first-child,
-    #grid th:first-child {
-        width: 60px !important;
+    /* un peu plus compact */
+    #grid td, #grid th {
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
     }
-    
-    #grid td:nth-child(2),
-    #grid th:nth-child(2) {
-       width: 30px !important;
+
+    #grid input {
+        font-size: 9px;
+    }
+
+    #result td, #result th {
+        font-size: 10px;
+        padding: 3px;
+    }
+
+    /* garder couleurs */
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 }
 
@@ -225,7 +270,24 @@ td:nth-child(2) {
 <body>
 
 <div class="container">
+<div class="header">
     <h3>Plan de montage</h3>
+
+    <div class="legende">
+        <div class="legende-titre">Liste des codes de couleurs:</div>
+        <div class="legende-ligne">
+            <span class="case B">B</span>
+            <span class="case N">N</span>
+            <span class="case GP">GP</span>
+            <span class="case GF">GF</span>
+            <span class="case BL">BL</span>
+            <span class="case V">V</span>
+            <span class="case O">O</span>
+            <span class="case J">J</span>
+            <span class="case BR">BR</span>
+        </div>
+    </div>
+</div>
 
     <table id="grid"></table>
 
