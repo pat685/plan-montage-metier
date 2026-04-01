@@ -80,6 +80,10 @@ th {
     box-shadow: 0 3px #1a4fa0;
 }
 
+    .calc-btn.pdf {
+    background: linear-gradient(#28a745, #1e7e34);
+}
+    
 .calc-btn:active {
     transform: translateY(2px);
     box-shadow: 0 1px #1a4fa0;
@@ -396,7 +400,8 @@ td:nth-child(2) {
     <table id="grid"></table>
 
     <button class="calc-btn" onclick="calculer()">Calculer</button>
-
+    <button class="calc-btn pdf" onclick="genererPDF()">Créer PDF</button>
+    
     <table id="result"></table>
 </div>
 
@@ -511,7 +516,20 @@ function sauver(){
     });
 })();
 
+/* ===== CHARGEMENT ===== */
+function genererPDF(){
+    const element = document.querySelector(".container");
+    
+    const opt = {
+        margin: 5,
+        filename: 'plan-montage.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 3 },
+        jsPDF: { unit: 'mm', format: 'letter', orientation: 'landscape' }
+    };
 
+    html2pdf().set(opt).from(element).save();
+}
 
 /* ===== CALCUL ===== */
 function calculer(){
@@ -628,5 +646,7 @@ window.addEventListener("afterprint", () => {
     
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
 </body>
 </html>
