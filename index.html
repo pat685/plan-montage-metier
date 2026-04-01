@@ -378,11 +378,19 @@ td:nth-child(2) {
 /* ================= PDF ONLY ================= */
 .pdf-mode .crampe-label {
     writing-mode: horizontal-tb !important;
-    transform: rotate(-90deg) !important;
-    transform-origin: center;
-    white-space: nowrap;
+    transform: none !important;
+    white-space: normal !important;
+    font-size: 10px;
 }
 
+.pdf-mode .crampe-label::after {
+    content: "C\A r\A a\A m\A p\A e\A s\A \A n\A o";
+    white-space: pre;
+    display: block;
+    text-align: center;
+    line-height: 14px;
+}
+    
 .pdf-mode #result {
     margin-top: -40px !important;
     position: relative;
@@ -407,7 +415,7 @@ td:nth-child(2) {
 </style>
 </head>
 
-/* ==================================================================================================
+/* ================================================================================================== */
     
 <body>
 
@@ -465,13 +473,7 @@ table.appendChild(titre);
 
 /* ===== ENTÊTE ===== */
 let tr = document.createElement("tr");
-tr.innerHTML = "<th></th><th class='crampe-label' rowspan='14'></th><th></th>";
-setTimeout(() => {
-const el = document.querySelector(".crampe-label");
-if(el){
-    el.innerHTML = "C<br>r<br>a<br>m<br>p<br>e<br>s<br>&nbsp;<br>n<br>o";
-    }
-}, 0);
+tr.innerHTML = "<th></th><th class='crampe-label' rowspan='14'>Crampes no.</th><th></th>";
 
 for(let c=1;c<=colonnes;c++){
     tr.innerHTML += "<th>"+c+"</th>";
