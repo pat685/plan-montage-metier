@@ -377,13 +377,16 @@ td:nth-child(2) {
 }
 /* ================= PDF ONLY ================= */
 .pdf-mode .crampe-label {
-    writing-mode: initial !important;
+    writing-mode: horizontal-tb !important;
     transform: rotate(-90deg) !important;
     transform-origin: center;
+    white-space: nowrap;
 }
 
 .pdf-mode #result {
-    margin-top: -80px !important;
+    margin-top: -40px !important;
+    position: relative;
+    z-index: 1;
 }
 
 .pdf-mode #grid td,
@@ -395,6 +398,10 @@ td:nth-child(2) {
 .pdf-mode #grid input {
     font-family: monospace !important;
     letter-spacing: -0.3px;
+}
+    
+.pdf-mode #grid {
+    margin-bottom: 40px !important;
 }
     
 </style>
@@ -542,14 +549,16 @@ function sauver(){
 })();
 
 /* ===== CHARGEMENT ===== */
+let pdfEnCours = false;
+
 function genererPDF(){
-    const element = document.querySelector(".container");
-    
-    // 🔥 activer mode PDF
+    if(pdfEnCours) return;   // 🔥 bloque double lancement
+    pdfEnCours = true;
+
     document.body.classList.add("pdf-mode");
-    // 🔥 désactiver styles print
-    document.body.classList.add("no-print");
-    
+
+    const element = document.querySelector(".container");
+
     const opt = {
         margin: 5,
         filename: 'plan-montage.pdf',
@@ -558,12 +567,9 @@ function genererPDF(){
         jsPDF: { unit: 'mm', format: 'letter', orientation: 'landscape' }
     };
 
-    // 🔥 revenir normal après
     html2pdf().set(opt).from(element).save().then(() => {
         document.body.classList.remove("pdf-mode");
-    });
-    html2pdf().set(opt).from(element).save().then(() => {
-        document.body.classList.remove("no-print");
+        pdfEnCours = false;
     });
 }
 
