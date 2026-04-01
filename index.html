@@ -166,12 +166,9 @@ td:nth-child(2) {
 }
 
 .crampe-label {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
     text-align: center;
-    white-space: nowrap;
     vertical-align: middle;
-    width: 30px;
+    line-height: 14px;
 }
 
 /* container déjà centré */
@@ -375,23 +372,7 @@ td:nth-child(2) {
         font-size: 9px;
     }
 }
-/* ================= PDF ONLY ================= */
-.pdf-mode .crampe-label {
-    writing-mode: horizontal-tb !important;
-    transform: none !important;
-    white-space: normal !important;
-    font-size: 10px;
-    color: transparent;
-}
 
-.pdf-mode .crampe-label::after {
-    content: "C\A r\A a\A m\A p\A e\A s\A \A n\A o";
-    white-space: pre;
-    display: block;
-    text-align: center;
-    line-height: 14px;
-}
-    
 .pdf-mode #result {
     margin-top: -40px !important;
     position: relative;
@@ -474,8 +455,13 @@ table.appendChild(titre);
 
 /* ===== ENTÊTE ===== */
 let tr = document.createElement("tr");
-tr.innerHTML = "<th></th><th class='crampe-label' rowspan='14'>Crampes no.</th><th></th>";
+tr.innerHTML = "<th></th><th class='crampe-label' rowspan='14'></th><th></th>";
+let label = tr.querySelector(".crampe-label");
 
+label.innerHTML = `
+C<br>r<br>a<br>m<br>p<br>e<br>s<br>&nbsp;<br>n<br>o
+`;
+    
 for(let c=1;c<=colonnes;c++){
     tr.innerHTML += "<th>"+c+"</th>";
 }
