@@ -240,52 +240,73 @@ td:nth-child(2) {
         display: none;
     }
 
-    /* cacher les inputs à l'impression */
+    /* cacher inputs */
     #grid input {
         display: none;
     }
 
-    /* afficher la valeur comme texte */
+    /* IMPORTANT */
+    #grid td {
+        position: relative;
+    }
+
+    /* afficher texte */
     #grid td::after {
         content: attr(data-val);
-        display: block;
-        font-size: 8px;
-        line-height: 14px;
-        text-align: center;
-    }
-    
-    /* forcer disposition verticale */
-    .container {
-        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 9px;
     }
 
-    /* grille en haut */
-    #grid {
-        margin-bottom: 20px;
+    /* garder couleurs */
+    #grid td {
+        background: inherit !important;
+        color: inherit !important;
     }
 
-    /* tableau résultat en dessous */
-    #result {
-        margin-top: 10px;
-    }
-
-    /* éviter coupure dans un tableau */
-    table {
-        page-break-inside: avoid;
-    }
-
-    /* un peu plus compact */
+    /* bordures + taille */
     #grid td, #grid th {
+        border: 1px solid #777 !important;
         width: 16px;
         height: 16px;
         font-size: 9px;
     }
 
-    #grid input {
-        font-size: 9px;
+    /* lignes fortes */
+    #grid tr:nth-child(5n) td {
+        border-bottom: 2px solid #555 !important;
     }
 
-    /* tableau résultat compact en impression */
+    #grid td:nth-child(5n) {
+        border-right: 2px solid #555 !important;
+    }
+
+    /* layout */
+    .container {
+        display: block;
+    }
+
+    #grid {
+        margin-bottom: 20px;
+    }
+
+    #result {
+        margin-top: 10px;
+    }
+
+    table {
+        page-break-inside: avoid;
+    }
+
+    /* tableau résultat */
     #result td {
         padding: 0 4px;
         height: 14px;
@@ -299,7 +320,7 @@ td:nth-child(2) {
         font-size: 10px;
     }
 
-    /* garder couleurs */
+    /* couleurs impression */
     * {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
