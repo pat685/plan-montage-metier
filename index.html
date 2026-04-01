@@ -350,6 +350,22 @@ td:nth-child(2) {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
+
+    /* cacher input */
+    .print-mode input {
+        display: none !important;
+    }
+
+    /* afficher texte propre */
+    .print-mode::after {
+        content: attr(data-print);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        font-size: 9px;
+    }
+    
 }
 
 </style>
@@ -592,7 +608,24 @@ function calculer(){
     document.getElementById("result").innerHTML = html;
 }
 
+// avant impression
+window.addEventListener("beforeprint", () => {
+    document.querySelectorAll("#grid td").forEach(td => {
+        const input = td.querySelector("input");
+        if(input){
+            td.setAttribute("data-print", input.value);
+            td.classList.add("print-mode");
+        }
+    });
+});
 
+// après impression
+window.addEventListener("afterprint", () => {
+    document.querySelectorAll("#grid td").forEach(td => {
+        td.classList.remove("print-mode");
+    });
+});
+    
 </script>
 
 </body>
