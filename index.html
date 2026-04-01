@@ -60,17 +60,11 @@ th {
     border-bottom: 1px solid #777;
 }
 
-/* ===== CRAMPES NO ===== */
-.vertical {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    border: 1px solid #777;
-}
-
 /* ===== BOUTON ===== */
 .calc-btn {
     display: block;
     margin: 10px 0; /* plus de margin-left */
+    margin-bottom: 5px;
     padding: 8px 20px;
     font-size: 15px;
     background: linear-gradient(#5da9ff, #2a6fd6);
@@ -110,9 +104,10 @@ td:nth-child(2) {
 }
 
 #result {
-    margin-top: 10px;
+    margin-top: -40px;
     border-collapse: collapse;
     font-size: 13px;
+    page-break-inside: avoid;
 }
 
 /* ENTÊTE */
@@ -167,6 +162,15 @@ td:nth-child(2) {
 .titre {
     text-align: center;
     margin-bottom: 5px;
+}
+
+.crampe-label {
+    transform: rotate(-90deg);
+    transform-origin: center;
+    white-space: nowrap;
+    text-align: center;
+    width: 30px;
+    vertical-align: middle;
 }
 
 /* container déjà centré */
@@ -431,7 +435,7 @@ table.appendChild(titre);
 
 /* ===== ENTÊTE ===== */
 let tr = document.createElement("tr");
-tr.innerHTML = "<th></th><th class='vertical' rowspan='14'>Crampes no.</th><th></th>";
+tr.innerHTML = "<th></th><th class='crampe-label' rowspan='14'>Crampes no.</th><th></th>";
 
 for(let c=1;c<=colonnes;c++){
     tr.innerHTML += "<th>"+c+"</th>";
