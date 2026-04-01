@@ -278,6 +278,12 @@ td:nth-child(2) {
         box-sizing: border-box;
         background: transparent;
     }
+
+    #grid tr:last-child input {
+        height: 100% !important;
+        line-height: 16px !important;
+    }
+    
     /* lignes fortes */
     #grid tr:nth-child(5n) td {
         border-bottom: 2px solid #555 !important;
@@ -287,6 +293,12 @@ td:nth-child(2) {
         border-right: 2px solid #555 !important;
     }
 
+    /* corriger dernière ligne */
+    #grid tr:last-child td {
+        height: 16px !important;
+        line-height: 16px !important;
+        padding: 0 !important;
+    }
     /* ===== LAYOUT ===== */
 
     .container {
